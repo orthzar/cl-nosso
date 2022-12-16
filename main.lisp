@@ -1,7 +1,7 @@
-;;;;client-v2.lisp
+;;;;main.lisp
 ;;;
 ;;; Nosso is a Nostr client library written in Common Lisp.
-;;; This is intented provides the essentials for interacting with Nostr relays and storing events.
+;;; This is intended to provide the essentials for interacting with Nostr relays and storing events.
 ;;; Ideally, this would be used to make a full-featured Nostr client.
 
 (defpackage "cl-nosso")
@@ -50,8 +50,9 @@
   ;; Parse the JSON into a Lisp property list
    (jonathan:parse nostr-event)))
 
-
+;;;
 ;;; Cryptography - using Ironclad and Flexichain
+;;;
 
 ;; WARNING / FIXME: This code stores private keys in the clear.
 ;; We need to encrypt them, but perhaps the entire database.
