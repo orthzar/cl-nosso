@@ -57,9 +57,25 @@
 ;; WARNING / FIXME: This code stores private keys in the clear.
 ;; We need to encrypt them, but perhaps the entire database.
 ;; Until code for that is added, don't use this library for anything serious!
-(defun create-and-store-a-keypair ()
-  (lambdalite:insert
-   (ironclad:generate-key-pair :secp256k1)))
+(defun make-key-pair ()
+  (let
+      ((key-pair (multiple-value-bind (private-key public-key)
+                     (ironclad:generate-key-pair :secp256k1)
+                   (list private-key public-key))))
+    ;;(:/PUBLIC-KEY (:Y #(4 144 ... 151 30))
+    ;; :/PRIVATE-KEY (:X #(75 36 ... 208 44)
+    ;;                :Y #(4 144 ... 151 30)))
+    (list
+     ':/public-key
+     (ironclad:destructure-public-key  (second key-pair))
+     ':/private-key
+     (ironclad:destructure-private-key (first key-pair)))))
+
+(defun store-key-pair (key-pair)
+  (lambdalite:insert :key-pairs key-pair))
+
+(defun make-store-key-pair ()
+  (store-key-pair (make-key-pair)))
 
 (defun sha256 (string)
   "Given a string, return a hash of that string"
